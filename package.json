@@ -35,7 +35,6 @@
       "node18-macos-arm64",
       "node18-win-arm64"
     ],
-    "compress": "GZip",
     "outputPath": "dist"
   }
 }
