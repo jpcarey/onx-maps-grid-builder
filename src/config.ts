@@ -15,18 +15,35 @@ export const initConfig = () => {
     "-r": "--rows",
   });
 
+  const initErrors: string[] = [];
   // validate for the required arguments
-  if (!args["--name"]) throw new Error("missing required argument: --name");
-  if (!args["--location"])
-    throw new Error("missing required argument: --location");
-  if (!args["--columns"])
-    throw new Error("missing required argument: --columns");
-  if (!args["--rows"]) throw new Error("missing required argument: --rows");
+  // This extra check is necessary for Typscript type safety
+  if (
+    !args["--name"] ||
+    !args["--location"] ||
+    !args["--columns"] ||
+    !args["--rows"] ||
+    !process.env.TOKEN
+  ) {
+    if (!args["--name"]) {
+      initErrors.push("missing required argument: --name");
+    }
+    if (!args["--location"]) {
+      initErrors.push("missing required argument: --location");
+    }
+    if (!args["--columns"]) {
+      initErrors.push("missing required argument: --columns");
+    }
+    if (!args["--rows"]) {
+      initErrors.push("missing required argument: --rows");
+    }
+    if (!process.env.TOKEN) {
+      // TODO: validate the token has been provided and appears to be valid
+      initErrors.push("missing required environment variable: TOKEN");
+    }
 
-  // TODO: validate the token has been provided and appears to be valid
-  // console.log(process.env.TOKEN?.substring(0, 10));
-  if (!process.env.TOKEN)
-    throw new Error("missing required environment variable: TOKEN");
+    throw new Error(initErrors.join("\n"));
+  }
 
   return {
     namePrefix: args["--name"],

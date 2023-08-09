@@ -23,6 +23,6 @@ main()
     console.log("Successfully created all grid items!");
   })
   .catch((err) => {
-    console.log(err);
+    console.log(err?.message || err);
     process.exit(1);
   });
